@@ -128,7 +128,7 @@ Here are the results of the prediction:
 |:---------------------:|:---------------------------------------------:| 
 | Speedlimit 60    		| Speedlimit 30									| 
 | No Passing   			| No Passing									|
-| Yield					| Caution										|
+| General Caution		| General Caution								|
 | Roadwork       		| Roadwork					 			    	| 
 | Turn Left Ahead		| Turn Left Ahead	        					|
 | End Of No passing		| End Of No passing	        					|
@@ -144,7 +144,7 @@ The code for making predictions on my final model is located in the 12th cell of
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
-Looking at the images below the edges of the sign really stands out wich I find interesting. There are many signs with this shape. What I would have thought where that the man in the middle holding the shovel should have standed out more.
+Looking at the images below the edges of the sign really stands out in the early layer. In the third layer the center of the sign is activated, this tells me that the network learns to the shape of the sign in the early layers and then in layer layers it learns to separate signs based on the content of the sign.
 
 ![alt text][image13]
 ![alt text][image14]
