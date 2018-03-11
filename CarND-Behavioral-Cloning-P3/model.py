@@ -59,10 +59,10 @@ def create_nvidia_model():
     model.add(Conv2D(64,(3,3),activation='relu'))
     model.add(Conv2D(64,(3,3),activation='relu'))
     model.add(Flatten())
-    model.add(Dense(1164))
-    model.add(Dense(100))
-    model.add(Dense(50))
-    model.add(Dense(10))
+    model.add(Dense(1164, activation='relu'))
+    model.add(Dense(100, activation='relu'))
+    model.add(Dense(50, activation='relu'))
+    model.add(Dense(10, activation='relu'))
     model.add(Dense(1)) # has no activation function
     return model
 def run_model(model, data, labels, validation_split=.2, epoch=10, log_path = '/home/henke/repos/tblogs'):
