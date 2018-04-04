@@ -23,7 +23,7 @@ def output_image(img, out_path, name):
     '''
     Read example images and print them to example map
     '''
-    cv2.imwrite(out_path + '/' + name + '.png', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+    cv2.imwrite(out_path + '/' + name + '.png',img)
 
 # --- Image util functions ---
 def convert_to_grayscale(img):
