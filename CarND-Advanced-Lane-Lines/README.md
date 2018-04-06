@@ -58,8 +58,8 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 ![alt text][image3]
 
-I started with looking at different color spaces. The ones I testad where RGB, HLS, HSV and LAB. After a visual inspection of the different channels in each color space I found the R channel in RGB to be a good fit and the s channel in HLS. After some experimenting I used thresholds of `(220, 255)` resp. `(100, 255)` .
-For gradient thresholds I used the Sobel operation in both x and y direction the magnitude and the direction of the gradients with the following thresholds `(25, 100)`, `(50, 150)`, `(50, 250)` and `(0.5, 1.3)`. I found the directional gradient to be extremely noicy and even thogh the performance was better when including it even thogh I wanted to exclude it since my images after applying only the directional threshold where very noicy. 
+I started with looking at different color spaces. The ones I testad where RGB, HLS, HSV and LAB. After a visual inspection of the different channels in each color space I found the R channel in RGB to be a good fit and the s channel in HLS. After some experimenting I used thresholds of `(220, 255)` resp. `(100, 255)` . However when applying this color transform on darker parts in the video I was not able to correctly see the lines. Instead I tried to specifically identify the yellow and the while in a hls image thresholding every channel as can be seen in cell 10.
+For gradient thresholds I used the Sobel operation in both x and y direction the magnitude and the direction of the gradients with the following thresholds `(20, 100)`, `(50, 150)`, `(50, 250)` and `(0.5, 1.3)`. I found the directional gradient to be extremely noicy and even thogh the performance was better when including it even thogh I wanted to exclude it since my images after applying only the directional threshold where very noicy. 
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
