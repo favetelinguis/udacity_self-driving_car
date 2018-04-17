@@ -4,9 +4,11 @@ import numpy as np
 import cv2
 import glob
 import time
-from sklearn.svm import LinearSVC
+from sklearn.svm import LinearSVC, SVC
+from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+import sys
 import lesson_functions
 
 
@@ -22,10 +24,9 @@ def get_data():
     return vehicle_imgs, nonvehicle_imgs
 
 
-def training(color_space='HSV', spatial_size=(32, 32),
-             hist_bins=32, orient=9, pix_per_cell=8,
-             cell_per_block=2, hog_channel='ALL',
-             spatial_feat=True, hist_feat=True, hog_feat=True):
+def training(color_space='YCrCb', spatial_size=(32, 32), hist_bins=32,
+                           orient=11, pix_per_cell=14, cell_per_block=2, hog_channel='ALL',
+                           spatial_feat=True, hist_feat=True, hog_feat=True):
     '''
     color_space Can be RGB, HSV, LUV, HLS, YUV, YCrCb
     hog_channel Can be 0, 1, 2, or "ALL"
@@ -65,7 +66,7 @@ def training(color_space='HSV', spatial_size=(32, 32),
           'pixels per cell and', cell_per_block, 'cells per block')
     print('Feature vector length:', len(X_train[0]))
     # Use a linear SVC
-    svc = LinearSVC()
+    svc = LinearSVC(C=100)
     # Check the training time for the SVC
     t = time.time()
     svc.fit(X_train, y_train)
@@ -83,10 +84,46 @@ def training(color_space='HSV', spatial_size=(32, 32),
     return svc, X_scaler
 
 
+def train_with_grid_search(color_space='YCrCb', spatial_size=(32, 32), hist_bins=32,
+                           orient=11, pix_per_cell=14, cell_per_block=2, hog_channel='ALL',
+                           spatial_feat=True, hist_feat=True, hog_feat=True):
+    parameters = {'C': [1, 100, 1000, 10000]}
+    svc = LinearSVC()
+    clf = GridSearchCV(svc, parameters, n_jobs=3, verbose=5)
+
+    cars, notcars = get_data()
+
+    print('Extracting features')
+    car_features = lesson_functions.extract_features(cars, color_space=color_space, spatial_size=spatial_size,
+                                                     hist_bins=hist_bins, orient=orient, pix_per_cell=pix_per_cell,
+                                                     cell_per_block=cell_per_block, hog_channel=hog_channel,
+                                                     spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=hog_feat)
+    notcar_features = lesson_functions.extract_features(notcars, color_space=color_space, spatial_size=spatial_size,
+                                                     hist_bins=hist_bins, orient=orient, pix_per_cell=pix_per_cell,
+                                                     cell_per_block=cell_per_block, hog_channel=hog_channel,
+                                                     spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=hog_feat)
+
+    # Create an array stack of feature vectors
+    X = np.vstack((car_features, notcar_features)).astype(np.float64)
+
+    # Define the labels vector
+    y = np.hstack((np.ones(len(car_features)), np.zeros(len(notcar_features))))
+
+    print('Starting to fit model')
+    clf.fit(X, y)
+    print('Best parameters found: ' + clf.best_params_)
+
+
 if __name__ == '__main__':
-    print('Starting training')
-    clf, scaler = training()
-    from sklearn.externals import joblib
-    print('Persisting model')
-    joblib.dump(clf, '../model.pkl')
-    joblib.dump(scaler, '../scaler.pkl')
+    opt = sys.argv[1]
+    if 'grid' in opt:
+        print('Searching best parameters')
+        params = train_with_grid_search()
+        print(params)
+    else:
+        print('Starting training')
+        clf, scaler = training()
+        from sklearn.externals import joblib
+        print('Persisting model')
+        joblib.dump(clf, '../model.pkl')
+        joblib.dump(scaler, '../scaler.pkl')
