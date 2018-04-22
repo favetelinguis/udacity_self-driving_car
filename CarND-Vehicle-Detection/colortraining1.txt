@@ -1,0 +1,13 @@
+-*- mode: compilation; default-directory: "~/repos/udacity_self-driving_car/CarND-Vehicle-Detection/pyvision/" -*-
+Comint started at Sat Apr 14 17:06:40
+
+/Users/henriklarsson/miniconda3/bin/ipython classifier.py
+Using spatial binning of: 32 and 32 histogram bins
+Feature vector length: 4932
+16.84 Seconds to train SVC...
+Test Accuracy of SVC =  0.9807
+My SVC predicts:  [0. 1. 0. 1. 1. 0. 1. 0. 0. 1.]
+For these 10 labels:  [1. 1. 0. 1. 1. 0. 1. 0. 0. 1.]
+0.0074 Seconds to predict 10 labels with SVC
+
+Inferior Python finished at Sat Apr 14 17:08:15
