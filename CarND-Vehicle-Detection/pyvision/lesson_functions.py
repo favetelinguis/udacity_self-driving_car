@@ -164,10 +164,10 @@ def draw_boxes(img, bboxes, color=(0, 0, 255), thick=2):
 # Define a function to extract features from a single image window
 # This function is very similar to extract_features()
 # just for a single image rather than list of images
-def single_img_features(img, color_space='RGB', spatial_size=(32, 32),
-                        hist_bins=32, orient=9,
-                        pix_per_cell=8, cell_per_block=2, hog_channel=0,
-                        spatial_feat=True, hist_feat=True, hog_feat=True):
+def single_img_features(img, color_space='YUV', spatial_size=(16, 16),
+                        hist_bins=32,
+                        orient=16, pix_per_cell=16, cell_per_block=2, hog_channel=0,
+                        spatial_feat=False, hist_feat=False, hog_feat=True):
     #1) Define an empty list to receive features
     img_features = []
     #2) Apply color conversion if other than 'RGB'
@@ -251,7 +251,7 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
     '''
     #draw_img = np.copy(img)
     # Normalize the image
-    img = cv2.cvtColor(img, cv2.COLOR_RGB2HLS).astype(np.float32) # /255
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2YUV).astype(np.float32) # /255
 
     # Specify the portion of the image we want to search
     img_tosearch = img[ystart:ystop,:,:]
@@ -296,17 +296,17 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
             ytop = ypos*pix_per_cell
 
             # Extract the image patch
-            subimg = cv2.resize(ctrans_tosearch[ytop:ytop+window, xleft:xleft+window], (64, 64))
+            #subimg = cv2.resize(ctrans_tosearch[ytop:ytop+window, xleft:xleft+window], (64, 64))
 
             # Get color features
-            spatial_features = bin_spatial(subimg, size=spatial_size)
-            hist_features = color_hist(subimg, nbins=hist_bins)
+            #spatial_features = bin_spatial(subimg, size=spatial_size)
+            #hist_features = color_hist(subimg, nbins=hist_bins)
 
             # Scale features and make a prediction
-            test_features = X_scaler.transform(np.hstack((spatial_features, hist_features, hog_features)).reshape(1, -1))
-            test_prediction = svc.predict(test_features)
+            #test_features = X_scaler.transform(np.hstack((spatial_features, hist_features, hog_features)).reshape(1, -1))
+            #test_prediction = svc.predict(test_features)
 
-            #test_prediction = svc.predict(hog_features.reshape(1, -1))
+            test_prediction = svc.predict(hog_features.reshape(1, -1))
 
             # Calculate box coordinates
             xbox_left = np.int(xleft*scale)

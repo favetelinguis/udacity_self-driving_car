@@ -24,8 +24,8 @@ def get_data():
     return vehicle_imgs, nonvehicle_imgs
 
 
-def training(color_space='HLS', spatial_size=(16, 16), hist_bins=32,
-                           orient=9, pix_per_cell=8, cell_per_block=2, hog_channel='ALL',
+def training(color_space='YCrCb', spatial_size=(16, 16), hist_bins=32,
+                           orient=16, pix_per_cell=16, cell_per_block=2, hog_channel='ALL',
                            spatial_feat=True, hist_feat=True, hog_feat=True):
     '''
     color_space Can be RGB, HSV, LUV, HLS, YUV, YCrCb
